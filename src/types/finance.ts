@@ -52,22 +52,22 @@ export interface UserSettings {
 }
 
 export const DEFAULT_CATEGORIES: Omit<Category, 'id'>[] = [
-  { name: 'Mercado', color: '#22c55e', icon: '🛒', isDefault: true },
-  { name: 'Necessidades', color: '#3b82f6', icon: '📦', isDefault: true },
-  { name: 'Eletrônicos', color: '#8b5cf6', icon: '💻', isDefault: true },
-  { name: 'Assinaturas', color: '#ec4899', icon: '📱', isDefault: true },
-  { name: 'Roupa', color: '#f59e0b', icon: '👕', isDefault: true },
-  { name: 'Beleza', color: '#d946ef', icon: '💅', isDefault: true },
-  { name: 'Presentes', color: '#f43f5e', icon: '🎁', isDefault: true },
-  { name: 'Saúde', color: '#14b8a6', icon: '🏥', isDefault: true },
-  { name: 'Despesas Eventuais', color: '#6366f1', icon: '💸', isDefault: true },
-  { name: 'Desenvolvimento', color: '#06b6d4', icon: '📚', isDefault: true },
-  { name: 'Uber/Transporte', color: '#64748b', icon: '🚗', isDefault: true },
-  { name: 'iFood/Restaurante', color: '#ef4444', icon: '🍔', isDefault: true },
-  { name: 'Lazer', color: '#a855f7', icon: '🎮', isDefault: true },
-  { name: 'Aluguel', color: '#0ea5e9', icon: '🏠', isDefault: true },
-  { name: 'Contas', color: '#eab308', icon: '📄', isDefault: true },
-  { name: 'Outros', color: '#94a3b8', icon: '📌', isDefault: true },
+  { name: 'Mercado', color: '#22c55e', icon: 'shopping-cart', isDefault: true },
+  { name: 'Necessidades', color: '#3b82f6', icon: 'package', isDefault: true },
+  { name: 'Eletrônicos', color: '#8b5cf6', icon: 'cpu', isDefault: true },
+  { name: 'Assinaturas', color: '#ec4899', icon: 'credit-card', isDefault: true },
+  { name: 'Roupa', color: '#f59e0b', icon: 'shirt', isDefault: true },
+  { name: 'Beleza', color: '#d946ef', icon: 'sparkles', isDefault: true },
+  { name: 'Presentes', color: '#f43f5e', icon: 'gift', isDefault: true },
+  { name: 'Saúde', color: '#14b8a6', icon: 'activity', isDefault: true },
+  { name: 'Despesas Eventuais', color: '#6366f1', icon: 'banknote', isDefault: true },
+  { name: 'Desenvolvimento', color: '#06b6d4', icon: 'graduation-cap', isDefault: true },
+  { name: 'Uber/Transporte', color: '#64748b', icon: 'car', isDefault: true },
+  { name: 'iFood/Restaurante', color: '#ef4444', icon: 'utensils', isDefault: true },
+  { name: 'Lazer', color: '#a855f7', icon: 'gamepad-2', isDefault: true },
+  { name: 'Aluguel', color: '#0ea5e9', icon: 'home', isDefault: true },
+  { name: 'Contas', color: '#eab308', icon: 'file-text', isDefault: true },
+  { name: 'Outros', color: '#94a3b8', icon: 'pin', isDefault: true },
 ];
 
 export const PAYMENT_METHODS = [

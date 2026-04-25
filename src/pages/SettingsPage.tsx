@@ -7,55 +7,36 @@ import { Button } from '@/components/ui/button';
 import { useState } from 'react';
 import { Moon, Sun, Trash2, LogOut } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { DynamicIcon } from '@/components/DynamicIcon';
 
-export function SettingsPage() {
-  const { user, signOut } = useAuth();
-  const { settings, updateSettings, categories, setLimit, getLimit, selectedMonth, addCategory, deleteCategory } = useFinance();
-  const [newCatName, setNewCatName] = useState('');
-
-  const isDark = settings.theme === 'dark';
-
-  return (
-    <div className="space-y-6 animate-fade-in-up">
-      <h1 className="text-lg font-bold">Configurações</h1>
-
-      {/* Theme */}
-      <div className="glass-card p-4">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            {isDark ? <Moon className="w-5 h-5 text-primary" /> : <Sun className="w-5 h-5 text-warning" />}
-            <div>
-              <p className="text-sm font-semibold">Modo Escuro</p>
-              <p className="text-xs text-muted-foreground">Alterne entre claro e escuro</p>
-            </div>
-          </div>
-          <Switch checked={isDark} onCheckedChange={(v) => updateSettings({ theme: v ? 'dark' : 'light' })} />
-        </div>
-      </div>
-
+// ... inside the component
       {/* Limits */}
-      <div className="glass-card p-4 space-y-3">
-        <h2 className="text-sm font-semibold">Limites por Categoria ({selectedMonth})</h2>
-        <p className="text-xs text-muted-foreground">Defina quanto deseja gastar no máximo em cada categoria neste mês.</p>
-        <div className="space-y-2">
+      <div className="glass-panel p-6 space-y-4">
+        <h2 className="text-sm font-mono text-white/40 uppercase tracking-widest">Limites por Categoria ({selectedMonth})</h2>
+        <div className="space-y-3">
           {categories.map(cat => {
             const currentLimit = getLimit(cat.id, selectedMonth);
             return (
-              <div key={cat.id} className="flex items-center gap-2">
-                <span className="text-sm w-6">{cat.icon}</span>
-                <span className="text-xs font-medium flex-1 truncate">{cat.name}</span>
-                <Input
-                  type="number"
-                  min="0"
-                  step="50"
-                  placeholder="0"
-                  className="w-24 h-8 text-xs"
-                  defaultValue={currentLimit || ''}
-                  onBlur={e => {
-                    const val = parseFloat(e.target.value) || 0;
-                    setLimit(cat.id, selectedMonth, val);
-                  }}
-                />
+              <div key={cat.id} className="flex items-center gap-4 bg-white/[0.02] p-3 rounded-xl border border-white/5">
+                <div className="w-8 h-8 rounded-lg bg-white/5 flex items-center justify-center text-white/60">
+                  <DynamicIcon name={cat.icon} className="w-4 h-4" />
+                </div>
+                <span className="text-xs font-medium flex-1 text-white/80">{cat.name}</span>
+                <div className="relative">
+                  <span className="absolute left-3 top-1/2 -translate-y-1/2 text-[10px] text-white/20 font-mono">R$</span>
+                  <Input
+                    type="number"
+                    min="0"
+                    step="50"
+                    placeholder="0"
+                    className="w-28 h-9 pl-8 bg-white/5 border-white/10 text-white text-xs font-mono"
+                    defaultValue={currentLimit || ''}
+                    onBlur={e => {
+                      const val = parseFloat(e.target.value) || 0;
+                      setLimit(cat.id, selectedMonth, val);
+                    }}
+                  />
+                </div>
               </div>
             );
           })}
@@ -63,34 +44,36 @@ export function SettingsPage() {
       </div>
 
       {/* Categories */}
-      <div className="glass-card p-4 space-y-3">
-        <h2 className="text-sm font-semibold">Gerenciar Categorias</h2>
+      <div className="glass-panel p-6 space-y-4">
+        <h2 className="text-sm font-mono text-white/40 uppercase tracking-widest">Gerenciar Categorias</h2>
         <div className="flex gap-2">
           <Input
             placeholder="Nova categoria"
             value={newCatName}
             onChange={e => setNewCatName(e.target.value)}
-            className="h-8 text-xs"
+            className="h-10 bg-white/5 border-white/10 text-white text-sm"
           />
           <Button
-            size="sm"
             onClick={() => {
               if (newCatName.trim()) {
-                addCategory({ name: newCatName.trim(), color: '#64748b', icon: '📌', isDefault: false });
+                addCategory({ name: newCatName.trim(), color: '#6366f1', icon: 'pin', isDefault: false });
                 setNewCatName('');
               }
             }}
-            className="gradient-primary text-primary-foreground h-8 text-xs"
+            className="bg-indigo-500 hover:bg-indigo-600 text-white h-10 px-6 rounded-xl"
           >
             Adicionar
           </Button>
         </div>
-        <div className="space-y-1">
+        <div className="space-y-2 pt-2">
           {categories.filter(c => !c.isDefault).map(cat => (
-            <div key={cat.id} className="flex items-center justify-between py-1">
-              <span className="text-sm">{cat.icon} {cat.name}</span>
-              <button onClick={() => deleteCategory(cat.id)} className="p-1 rounded hover:bg-destructive/20 transition-colors">
-                <Trash2 className="w-3.5 h-3.5 text-destructive" />
+            <div key={cat.id} className="flex items-center justify-between p-3 rounded-xl bg-white/5 border border-white/5 group">
+              <div className="flex items-center gap-3">
+                <DynamicIcon name={cat.icon} className="text-white/40 group-hover:text-white transition-colors" />
+                <span className="text-sm text-white/80">{cat.name}</span>
+              </div>
+              <button onClick={() => deleteCategory(cat.id)} className="p-2 rounded-lg hover:bg-red-500/10 transition-colors">
+                <Trash2 className="w-4 h-4 text-red-500/40 hover:text-red-500" />
               </button>
             </div>
           ))}

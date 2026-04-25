@@ -3,16 +3,8 @@ import { useFinance } from '@/contexts/FinanceContext';
 import { MonthSelector } from '@/components/MonthSelector';
 import { EmptyState } from '@/components/EmptyState';
 import { TransactionModal } from '@/components/TransactionModal';
-import { TrendingUp, TrendingDown, CalendarClock, Trash2, Pencil } from 'lucide-react';
-import { cn } from '@/lib/utils';
-import { Transaction } from '@/types/finance';
-import { format, parseISO } from 'date-fns';
-import { ptBR } from 'date-fns/locale';
-import {
-  AlertDialog, AlertDialogAction, AlertDialogCancel,
-  AlertDialogContent, AlertDialogDescription, AlertDialogFooter,
-  AlertDialogHeader, AlertDialogTitle,
-} from '@/components/ui/alert-dialog';
+import { DynamicIcon } from '@/components/DynamicIcon';
+import { TrendingUp, TrendingDown, CalendarClock, Trash2, Pencil, Wallet } from 'lucide-react';
 
 export function OverviewPage() {
   const { getTotalIncome, getTotalExpenses, getTotalFixed, getBalance, getMonthTransactions, deleteTransaction, categories, incomeSources } = useFinance();
@@ -27,7 +19,7 @@ export function OverviewPage() {
   const transactions = getMonthTransactions().sort((a, b) => b.date.localeCompare(a.date));
 
   const getCatInfo = (id: string | null) => categories.find(c => c.id === id);
-  const getSourceName = (id: string | null | undefined) => incomeSources.find(s => s.id === id);
+  const getSourceInfo = (id: string | null | undefined) => incomeSources.find(s => s.id === id);
 
   const formatCurrency = (v: number) =>
     v.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
@@ -83,20 +75,25 @@ export function OverviewPage() {
         </div>
         
         {transactions.length === 0 ? (
-          <EmptyState icon="💰" title="Nenhuma transação" description="Adicione sua primeira transação usando o botão +" />
+          <EmptyState icon={<Wallet className="w-8 h-8 text-white/20" />} title="Nenhuma transação" description="Adicione sua primeira transação usando o botão +" />
         ) : (
           <div className="space-y-3">
             {transactions.slice(0, 10).map(tx => {
               const cat = getCatInfo(tx.categoryId);
+              const source = getSourceInfo(tx.incomeSourceId);
               return (
                 <div key={tx.id} className="bg-white/[0.02] border border-white/5 rounded-2xl p-4 flex items-center gap-4 hover:bg-white/[0.06] transition-all group">
-                  <div className="w-10 h-10 rounded-xl flex items-center justify-center text-xl bg-white/5 border border-white/5 group-hover:border-white/10 transition-colors">
-                    {tx.type === 'income' ? (getSourceName(tx.incomeSourceId)?.icon || '💰') : cat?.icon || '📌'}
+                  <div className="w-10 h-10 rounded-xl flex items-center justify-center text-white/60 bg-white/5 border border-white/5 group-hover:border-white/10 transition-colors">
+                    {tx.type === 'income' ? (
+                      <DynamicIcon name={source?.icon} fallback={<Wallet className="w-5 h-5" />} />
+                    ) : (
+                      <DynamicIcon name={cat?.icon} fallback={<Icons.Tag className="w-5 h-5" />} />
+                    )}
                   </div>
                   <div className="flex-1 min-w-0">
                     <p className="text-sm font-medium text-white/90 truncate mb-0.5">{tx.description}</p>
                     <p className="text-[10px] font-mono text-white/30 uppercase tracking-wider">
-                      {tx.type === 'income' ? (getSourceName(tx.incomeSourceId)?.name || 'Receita') : (cat?.name || '')} · {format(parseISO(tx.date), 'dd MMM', { locale: ptBR })}
+                      {tx.type === 'income' ? (source?.name || 'Receita') : (cat?.name || '')} · {format(parseISO(tx.date), 'dd MMM', { locale: ptBR })}
                     </p>
                   </div>
                   <div className="text-right flex flex-col items-end gap-1">

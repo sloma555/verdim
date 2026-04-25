@@ -8,6 +8,8 @@ import { Switch } from '@/components/ui/switch';
 import { useFinance } from '@/contexts/FinanceContext';
 import { FixedExpense, PAYMENT_METHODS } from '@/types/finance';
 import { format } from 'date-fns';
+import { DynamicIcon } from '@/components/DynamicIcon';
+import { cn } from '@/lib/utils';
 
 interface FixedExpenseModalProps {
   open: boolean;
@@ -59,26 +61,31 @@ export function FixedExpenseModal({ open, onClose, editExpense }: FixedExpenseMo
 
   return (
     <Dialog open={open} onOpenChange={(o) => !o && onClose()}>
-      <DialogContent className="glass-card max-w-[95vw] sm:max-w-md">
+      <DialogContent className="glass-panel max-w-[95vw] sm:max-w-md border-none">
         <DialogHeader>
-          <DialogTitle>{editExpense ? 'Editar Gasto Fixo' : 'Novo Gasto Fixo'}</DialogTitle>
+          <DialogTitle className="text-white">{editExpense ? 'Editar Gasto Fixo' : 'Novo Gasto Fixo'}</DialogTitle>
         </DialogHeader>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <Label>Nome</Label>
-            <Input placeholder="Ex: Netflix" value={name} onChange={e => setName(e.target.value)} required />
+            <Label className="text-white/60">Nome</Label>
+            <Input placeholder="Ex: Netflix" value={name} onChange={e => setName(e.target.value)} required className="bg-white/5 border-white/10 text-white" />
           </div>
           <div>
-            <Label>Valor (R$)</Label>
-            <Input type="number" step="0.01" min="0" placeholder="0,00" value={amount} onChange={e => setAmount(e.target.value)} required />
+            <Label className="text-white/60">Valor (R$)</Label>
+            <Input type="number" step="0.01" min="0" placeholder="0,00" value={amount} onChange={e => setAmount(e.target.value)} required className="bg-white/5 border-white/10 text-white font-mono" />
           </div>
           <div>
-            <Label>Categoria</Label>
+            <Label className="text-white/60">Categoria</Label>
             <Select value={categoryId} onValueChange={setCategoryId}>
-              <SelectTrigger><SelectValue placeholder="Selecione" /></SelectTrigger>
-              <SelectContent>
+              <SelectTrigger className="bg-white/5 border-white/10 text-white"><SelectValue placeholder="Selecione" /></SelectTrigger>
+              <SelectContent className="glass-panel border-none">
                 {categories.map(c => (
-                  <SelectItem key={c.id} value={c.id}>{c.icon} {c.name}</SelectItem>
+                  <SelectItem key={c.id} value={c.id}>
+                    <div className="flex items-center gap-2">
+                      <DynamicIcon name={c.icon} className="w-4 h-4" />
+                      <span>{c.name}</span>
+                    </div>
+                  </SelectItem>
                 ))}
               </SelectContent>
             </Select>

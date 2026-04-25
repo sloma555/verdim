@@ -6,7 +6,8 @@ import { EmptyState } from '@/components/EmptyState';
 import { cn } from '@/lib/utils';
 import { format, parseISO } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
-import { ArrowLeft } from 'lucide-react';
+import { DynamicIcon } from '@/components/DynamicIcon';
+import { ArrowLeft, LayoutGrid } from 'lucide-react';
 
 export function CategoriesPage() {
   const { categories, getCategorySpent, getLimit, selectedMonth, getMonthTransactions, getMonthFixedExpenses } = useFinance();
@@ -24,42 +25,44 @@ export function CategoriesPage() {
     const fixeds = getMonthFixedExpenses().filter(f => f.categoryId === selectedCat);
 
     return (
-      <div className="space-y-4 animate-fade-in-up">
-        <button onClick={() => setSelectedCat(null)} className="flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground transition-colors">
+      <div className="space-y-6 animate-fade-in-up">
+        <button onClick={() => setSelectedCat(null)} className="flex items-center gap-2 text-sm text-white/40 hover:text-white transition-colors font-mono uppercase tracking-widest">
           <ArrowLeft className="w-4 h-4" /> Voltar
         </button>
-        <div className="glass-card p-4">
-          <div className="flex items-center gap-3 mb-3">
-            <span className="text-2xl">{cat.icon}</span>
+        <div className="glass-panel p-6">
+          <div className="flex items-center gap-4 mb-6">
+            <div className="w-14 h-14 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center text-white/60">
+              <DynamicIcon name={cat.icon} className="w-7 h-7" />
+            </div>
             <div>
-              <h2 className="font-semibold">{cat.name}</h2>
-              <p className="text-sm text-muted-foreground">Gasto: {formatCurrency(spent)}</p>
+              <h2 className="text-xl font-medium text-white">{cat.name}</h2>
+              <p className="text-sm text-white/40">Gasto: {formatCurrency(spent)}</p>
             </div>
           </div>
           <CategoryThermometer spent={spent} limit={limit} />
         </div>
 
-        <h3 className="text-sm font-semibold">Transações</h3>
+        <h3 className="text-sm font-mono text-white/40 uppercase tracking-widest px-2">Transações</h3>
         {txs.length === 0 && fixeds.length === 0 ? (
-          <EmptyState icon="📂" title="Nada aqui" description="Nenhuma transação nesta categoria este mês." />
+          <EmptyState icon={<LayoutGrid className="w-8 h-8 text-white/20" />} title="Nada aqui" description="Nenhuma transação nesta categoria este mês." />
         ) : (
-          <div className="space-y-2">
+          <div className="space-y-3">
             {txs.map(tx => (
-              <div key={tx.id} className="glass-card p-3 flex justify-between items-center">
+              <div key={tx.id} className="bg-white/[0.02] border border-white/5 p-4 rounded-2xl flex justify-between items-center group hover:bg-white/[0.05] transition-colors">
                 <div>
-                  <p className="text-sm font-medium">{tx.description}</p>
-                  <p className="text-[10px] text-muted-foreground">{format(parseISO(tx.date), 'dd MMM', { locale: ptBR })}</p>
+                  <p className="text-sm font-medium text-white/80">{tx.description}</p>
+                  <p className="text-[10px] font-mono text-white/30 uppercase tracking-wider">{format(parseISO(tx.date), 'dd MMM', { locale: ptBR })}</p>
                 </div>
-                <span className="text-sm font-bold text-expense">{formatCurrency(tx.amount)}</span>
+                <span className="text-sm font-bold font-mono text-expense tracking-tighter">-{formatCurrency(tx.amount).replace('R$', '').trim()}</span>
               </div>
             ))}
             {fixeds.map(f => (
-              <div key={f.id} className="glass-card p-3 flex justify-between items-center">
+              <div key={f.id} className="bg-white/[0.02] border border-white/5 p-4 rounded-2xl flex justify-between items-center group hover:bg-white/[0.05] transition-colors">
                 <div>
-                  <p className="text-sm font-medium">{f.name} <span className="text-[10px] text-primary">(fixo)</span></p>
-                  <p className="text-[10px] text-muted-foreground">Venc. {format(parseISO(f.dueDate), 'dd MMM', { locale: ptBR })}</p>
+                  <p className="text-sm font-medium text-white/80">{f.name} <span className="text-[10px] font-mono text-indigo-400 uppercase tracking-widest ml-1">(fixo)</span></p>
+                  <p className="text-[10px] font-mono text-white/30 uppercase tracking-wider">Venc. {format(parseISO(f.dueDate), 'dd MMM', { locale: ptBR })}</p>
                 </div>
-                <span className="text-sm font-bold text-expense">{formatCurrency(f.amount)}</span>
+                <span className="text-sm font-bold font-mono text-expense tracking-tighter">-{formatCurrency(f.amount).replace('R$', '').trim()}</span>
               </div>
             ))}
           </div>
@@ -69,9 +72,9 @@ export function CategoriesPage() {
   }
 
   return (
-    <div className="space-y-4 animate-fade-in-up">
+    <div className="space-y-6 animate-fade-in-up">
       <MonthSelector />
-      <div className="grid grid-cols-2 gap-2">
+      <div className="grid grid-cols-2 gap-4">
         {categories.map(cat => {
           const spent = getCategorySpent(cat.id);
           const limit = getLimit(cat.id, selectedMonth);
@@ -79,13 +82,15 @@ export function CategoriesPage() {
             <button
               key={cat.id}
               onClick={() => setSelectedCat(cat.id)}
-              className="glass-card p-3 text-left transition-all hover:scale-[1.02] active:scale-[0.98]"
+              className="glass-panel p-4 text-left transition-all hover:-translate-y-1 active:scale-95 group"
             >
-              <div className="flex items-center gap-2 mb-2">
-                <span className="text-lg">{cat.icon}</span>
-                <span className="text-xs font-semibold truncate">{cat.name}</span>
+              <div className="flex items-center gap-3 mb-4">
+                <div className="w-8 h-8 rounded-lg bg-white/5 flex items-center justify-center text-white/40 group-hover:text-white transition-colors">
+                  <DynamicIcon name={cat.icon} className="w-4 h-4" />
+                </div>
+                <span className="text-xs font-medium text-white/60 group-hover:text-white transition-colors truncate">{cat.name}</span>
               </div>
-              <p className="text-sm font-bold mb-1.5">{formatCurrency(spent)}</p>
+              <p className="text-lg font-bold text-white mb-2 font-mono tracking-tighter">{formatCurrency(spent).replace('R$', '').trim()}</p>
               <CategoryThermometer spent={spent} limit={limit} compact />
             </button>
           );

@@ -7,6 +7,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { useFinance } from '@/contexts/FinanceContext';
 import { Transaction, PAYMENT_METHODS } from '@/types/finance';
 import { format } from 'date-fns';
+import { DynamicIcon } from '@/components/DynamicIcon';
 
 interface TransactionModalProps {
   open: boolean;
@@ -124,7 +125,12 @@ export function TransactionModal({ open, onClose, editTransaction }: Transaction
                 <SelectTrigger><SelectValue placeholder="Selecione (opcional)" /></SelectTrigger>
                 <SelectContent>
                   {incomeSources.map(s => (
-                    <SelectItem key={s.id} value={s.id}>{s.icon} {s.name}</SelectItem>
+                    <SelectItem key={s.id} value={s.id}>
+                      <div className="flex items-center gap-2">
+                        <DynamicIcon name={s.icon} className="w-4 h-4" />
+                        <span>{s.name}</span>
+                      </div>
+                    </SelectItem>
                   ))}
                 </SelectContent>
               </Select>
@@ -139,7 +145,12 @@ export function TransactionModal({ open, onClose, editTransaction }: Transaction
                   <SelectTrigger><SelectValue placeholder="Selecione" /></SelectTrigger>
                   <SelectContent>
                     {categories.map(c => (
-                      <SelectItem key={c.id} value={c.id}>{c.icon} {c.name}</SelectItem>
+                      <SelectItem key={c.id} value={c.id}>
+                        <div className="flex items-center gap-2">
+                          <DynamicIcon name={c.icon} className="w-4 h-4" />
+                          <span>{c.name}</span>
+                        </div>
+                      </SelectItem>
                     ))}
                   </SelectContent>
                 </Select>

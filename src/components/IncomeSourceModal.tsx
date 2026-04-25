@@ -5,8 +5,9 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { IncomeSource } from '@/types/finance';
 import { cn } from '@/lib/utils';
+import { DynamicIcon } from '@/components/DynamicIcon';
 
-const EMOJI_OPTIONS = ['🏍', '💻', '💼', '🏪', '🚗', '🔧', '📦', '🎨', '📱', '🏠', '💰', '🎵', '📸', '✂️', '🍔', '🛠'];
+const ICON_OPTIONS = ['wallet', 'banknote', 'credit-card', 'briefcase', 'monitor', 'shopping-cart', 'truck', 'home', 'coins', 'trending-up', 'smartphone', 'gift', 'utensils'];
 const COLOR_OPTIONS = ['#22c55e', '#3b82f6', '#8b5cf6', '#ec4899', '#f59e0b', '#ef4444', '#14b8a6', '#f97316'];
 
 interface IncomeSourceModalProps {
@@ -18,7 +19,7 @@ interface IncomeSourceModalProps {
 
 export function IncomeSourceModal({ open, onClose, editSource, onSave }: IncomeSourceModalProps) {
   const [name, setName] = useState('');
-  const [icon, setIcon] = useState('💰');
+  const [icon, setIcon] = useState('wallet');
   const [color, setColor] = useState('#22c55e');
 
   useEffect(() => {
@@ -28,7 +29,7 @@ export function IncomeSourceModal({ open, onClose, editSource, onSave }: IncomeS
       setColor(editSource.color);
     } else {
       setName('');
-      setIcon('💰');
+      setIcon('wallet');
       setColor('#22c55e');
     }
   }, [editSource, open]);
@@ -42,30 +43,30 @@ export function IncomeSourceModal({ open, onClose, editSource, onSave }: IncomeS
 
   return (
     <Dialog open={open} onOpenChange={(o) => !o && onClose()}>
-      <DialogContent className="glass-card max-w-[95vw] sm:max-w-md">
+      <DialogContent className="glass-panel max-w-[95vw] sm:max-w-md border-none">
         <DialogHeader>
-          <DialogTitle>{editSource ? 'Editar Fonte' : 'Nova Fonte de Renda'}</DialogTitle>
+          <DialogTitle className="text-white">{editSource ? 'Editar Fonte' : 'Nova Fonte de Renda'}</DialogTitle>
         </DialogHeader>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <Label>Nome</Label>
-            <Input placeholder="Ex: Motoboy, Freelance..." value={name} onChange={e => setName(e.target.value)} required />
+            <Label className="text-white/60">Nome</Label>
+            <Input placeholder="Ex: Motoboy, Freelance..." value={name} onChange={e => setName(e.target.value)} required className="bg-white/5 border-white/10 text-white" />
           </div>
 
           <div>
-            <Label>Ícone</Label>
-            <div className="flex flex-wrap gap-2 mt-1">
-              {EMOJI_OPTIONS.map(e => (
+            <Label className="text-white/60">Ícone</Label>
+            <div className="grid grid-cols-6 gap-2 mt-2">
+              {ICON_OPTIONS.map(e => (
                 <button
                   key={e}
                   type="button"
                   onClick={() => setIcon(e)}
                   className={cn(
-                    "w-10 h-10 rounded-lg text-xl flex items-center justify-center transition-all",
-                    icon === e ? "ring-2 ring-primary bg-primary/20 scale-110" : "bg-secondary hover:bg-secondary/80"
+                    "w-10 h-10 rounded-xl flex items-center justify-center transition-all",
+                    icon === e ? "bg-indigo-500 text-white shadow-[0_0_15px_rgba(79,70,229,0.5)]" : "bg-white/5 text-white/40 hover:bg-white/10"
                   )}
                 >
-                  {e}
+                  <DynamicIcon name={e} className="w-5 h-5" />
                 </button>
               ))}
             </div>
