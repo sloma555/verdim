@@ -27,25 +27,24 @@ const Index = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background pb-20">
-      <div className="max-w-lg mx-auto px-4 pt-6">
+    <div className="min-h-screen bg-[#020205] text-white selection:bg-indigo-500/30 overflow-x-hidden">
+      {/* Background Elements */}
+      <div className="blob blob-1" />
+      <div className="blob blob-2" />
+      <div className="blob blob-3" />
+      <div className="noise-overlay" />
+      <div className="grid-overlay" />
+
+      <div className="max-w-lg mx-auto px-4 pt-6 pb-32">
         {renderPage()}
       </div>
 
-      {/* FAB */}
-      {tab !== 'settings' && tab !== 'admin' && (
-        <button
-          onClick={() => setTxModalOpen(true)}
-          className="fixed bottom-20 right-4 z-50 w-14 h-14 rounded-full gradient-primary flex items-center justify-center fab-shadow transition-transform hover:scale-105 active:scale-95"
-        >
-          <Plus className="w-6 h-6 text-primary-foreground" />
-        </button>
-      )}
-
-      <BottomNav active={tab} onChange={setTab} />
+      <BottomNav active={tab} onChange={setTab} onAddClick={() => setTxModalOpen(true)} />
       <TransactionModal open={txModalOpen} onClose={() => setTxModalOpen(false)} />
     </div>
   );
 };
+
+
 
 export default Index;
