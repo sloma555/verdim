@@ -24,15 +24,7 @@ export function BottomNav({ active, onChange, onAddClick }: BottomNavProps) {
   const visibleTabs = tabs.filter(t => !t.adminOnly || isAdmin);
 
   return (
-    <div className="fixed bottom-8 left-0 right-0 z-50 flex flex-col items-center gap-4 px-4 pointer-events-none">
-      {/* FAB - Integrated floating button */}
-      <button 
-        onClick={onAddClick}
-        className="pointer-events-auto w-14 h-14 rounded-2xl bg-indigo-500 hover:bg-indigo-600 text-white flex items-center justify-center shadow-[0_15px_35px_-5px_rgba(79,70,229,0.5)] transition-all hover:-translate-y-1 active:scale-95"
-      >
-        <Plus className="w-7 h-7" />
-      </button>
-
+    <div className="fixed bottom-8 left-0 right-0 z-50 flex justify-center px-4 pointer-events-none">
       {/* Main Nav Pill */}
       <nav className="pointer-events-auto glass-panel p-1.5 rounded-[2rem] flex items-center gap-1 shadow-2xl">
         {visibleTabs.map(tab => {
@@ -51,6 +43,17 @@ export function BottomNav({ active, onChange, onAddClick }: BottomNavProps) {
             </button>
           );
         })}
+
+        <div className="w-[1px] h-8 bg-white/10 mx-1"></div>
+
+        {/* FAB - Integrated inside nav */}
+        <button 
+          onClick={onAddClick}
+          className="w-12 h-12 rounded-[1.2rem] bg-indigo-500 hover:bg-indigo-600 text-white flex flex-col items-center justify-center shadow-[0_5px_15px_-3px_rgba(79,70,229,0.5)] transition-all hover:scale-105 active:scale-95"
+        >
+          <Plus className="w-5 h-5" />
+          <span className="text-[7px] font-mono tracking-widest uppercase opacity-90">Novo</span>
+        </button>
       </nav>
     </div>
   );
